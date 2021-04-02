@@ -14,7 +14,7 @@ function ElementBuilder(name) {
   this.placeholder = function (placeholder) {
     this.element.placeholder = placeholder;
     return this;
-  }
+  };
 
   this.attr = function (name, value) {
     this.element.setAttribute(name, value);
@@ -37,18 +37,19 @@ function ElementBuilder(name) {
   };
 
   this.onclick = function (name, phone, ul) {
-    this.element.onclick = function () {
+    this.element.onclick = function (event) {
       const nameVal = name.value;
       const phoneVal = phone.value;
 
       const list = new Render(ul);
       if (!list.checkEmpty(nameVal, phoneVal)) {
         list.addContact(nameVal, phoneVal);
-      };
-    }
+      }
+
+      event.preventDefault();
+    };
     return this;
   };
-  
 
   this.appendTo = function (container) {
     container.append(this.element);
@@ -79,10 +80,9 @@ function PhoneBook() {
     this.records.push(contact);
 
     // this.records.forEach(function (item) {
-      
+
     // })
 
-    
     console.log(this.records);
     return this;
   };
@@ -91,10 +91,7 @@ function PhoneBook() {
     const result = this.records.includes(name);
   };
 
-  this.remove = function () {
-
-  };
-  
+  this.remove = function () {};
 }
 
 function Render(container) {
@@ -102,121 +99,105 @@ function Render(container) {
   const phoneBook = new PhoneBook();
 
   this.init = function () {
-
     const innerContainer = builder
-    .create("div")
-    .id("innerContainer")
-    .appendTo(this.container)
-    .build();
+      .create("div")
+      .id("innerContainer")
+      .appendTo(this.container)
+      .build();
 
     const h1 = builder
-    .create("h1")
-    .text("Phone Book")
-    .appendTo(innerContainer)
-    .build();
+      .create("h1")
+      .text("Phone Book")
+      .appendTo(innerContainer)
+      .build();
 
     const phoneIcon = builder
-    .create("i")
-    .class("far fa-address-book")
-    .appendTo(h1)
-    .build();
+      .create("i")
+      .class("far fa-address-book")
+      .appendTo(h1)
+      .build();
 
     const search = builder
-    .create("div")
-    .class("search")
-    .appendTo(innerContainer)
-    .build();
+      .create("div")
+      .class("search")
+      .appendTo(innerContainer)
+      .build();
 
     const searchField = builder
-    .create("input")
-    .placeholder("search")
-    .type("search")
-    .id("search")
-    .appendTo(search)
-    .build();
+      .create("input")
+      .placeholder("search")
+      .type("search")
+      .id("search")
+      .appendTo(search)
+      .build();
 
     const searchBtn = builder
-    .create("button")
-    .id("searchBtn")
-    .appendTo(search)
-    .build();
+      .create("button")
+      .id("searchBtn")
+      .appendTo(search)
+      .build();
 
     const searchIcon = builder
-    .create("i")
-    .class("fa fa-search")
-    .appendTo(searchBtn)
-    .build();
+      .create("i")
+      .class("fa fa-search")
+      .appendTo(searchBtn)
+      .build();
 
-    const form = builder
-    .create("form")
-    .appendTo(innerContainer)
-    .build();
+    const form = builder.create("form").appendTo(innerContainer).build();
 
     const h2 = builder
-    .create("h2")
-    .text("Add New Contact")
-    .appendTo(form)
-    .build();
+      .create("h2")
+      .text("Add New Contact")
+      .appendTo(form)
+      .build();
 
     const name = builder
-    .create("input")
-    .type("text")
-    .class("block")
-    .id("name")
-    .placeholder("name")
-    .appendTo(form)
-    .build();
+      .create("input")
+      .type("text")
+      .class("block")
+      .id("name")
+      .placeholder("name")
+      .appendTo(form)
+      .build();
 
     const phone = builder
-    .create("input")
-    .type("text")
-    .class("block")
-    .id("phone")
-    .placeholder("phone")
-    .appendTo(form)
-    .build();
-    
+      .create("input")
+      .type("text")
+      .class("block")
+      .id("phone")
+      .placeholder("phone")
+      .appendTo(form)
+      .build();
+
     const table = builder
-    .create("section")
-    .class("table")
-    .appendTo(innerContainer)
-    .build();
+      .create("section")
+      .class("table")
+      .appendTo(innerContainer)
+      .build();
 
-    const thead = builder
-    .create("div")
-    .class("thead")
-    .appendTo(table)
-    .build();
+    const thead = builder.create("div").class("thead").appendTo(table).build();
 
-    const firstTh = builder
-    .create("div")
-    .text("Name")
-    .appendTo(thead)
-    .build();
+    const firstTh = builder.create("div").text("Name").appendTo(thead).build();
 
     const secondTh = builder
-    .create("div")
-    .text("Phone")
-    .appendTo(thead)
-    .build();
+      .create("div")
+      .text("Phone")
+      .appendTo(thead)
+      .build();
 
-    const ul = builder
-    .create("ul")
-    .appendTo(table)
-    .build();
+    const ul = builder.create("ul").appendTo(table).build();
 
     const addBtn = builder
-    .create("button")
-    .text("Add")
-    .class("block")
-    .id("addBtn")
-    .onclick(name, phone, ul)
-    .appendTo(form)
-    .build();
+      .create("button")
+      .text("Add")
+      .class("block")
+      .id("addBtn")
+      .onclick(name, phone, ul)
+      .appendTo(form)
+      .build();
   };
 
   this.checkEmpty = function (val1, val2) {
-    
     if (val1 === "" || val2 === "") {
       alert(`please fill both field!`);
       return true;
@@ -226,40 +207,25 @@ function Render(container) {
 
   this.addContact = function (name, phone) {
     const result = phoneBook.add(name, phone);
-    console.log( phoneBook.records);
+    console.log(phoneBook.records);
     console.log(result);
 
-    const li = builder
-      .create("li")
-      .appendTo(this.container)
-      .build();
+    const li = builder.create("li").appendTo(this.container).build();
 
-      const nameLi = builder
-      .create("div")
-      .text(name)
-      .appendTo(li)
-      .build();
+    const nameLi = builder.create("div").text(name).appendTo(li).build();
 
-      const phoneLi = builder
-      .create("div")
-      .text(phone)
-      .appendTo(li)
-      .build();
+    const phoneLi = builder.create("div").text(phone).appendTo(li).build();
 
-      const removeLi = builder
-      .create("div")
-      .appendTo(li)
-      .build();
+    const removeLi = builder.create("div").appendTo(li).build();
 
-      const removeIcon = builder
+    const removeIcon = builder
       .create("i")
       .class("fas fa-minus-circle")
       .appendTo(removeLi)
       .build();
-
   };
 
-  //other functions 
+  //other functions
 }
 
 const phoneBookContainer = document.getElementById("phone-book-container");
